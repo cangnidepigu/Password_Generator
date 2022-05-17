@@ -57,7 +57,7 @@
   <component name="RunManager" selected="Application.App">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.App" />
-      <module name="PasswrodGenerator" />
+      <module name="PasswordGenerator" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="org.example.*" />
@@ -69,9 +69,22 @@
       </method>
     </configuration>
     <configuration name="All in PasswrodGenerator" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="PasswrodGenerator" />
+      <module name="PasswordGenerator" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="PasswordGenerator" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="PasswordGenerator" />
+      <option name="filePath" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
