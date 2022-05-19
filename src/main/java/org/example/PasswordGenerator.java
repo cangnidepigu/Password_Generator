@@ -1,125 +1,81 @@
 package org.example;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class PasswordGenerator {
+    private static final String LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
+    private static final String UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String NUMBERS = "0123456789";
+    private static final String SYMBOLS = "!`~@#$%^&*()_-+=[]|,./?><";
 
-    public enum INCLUDE { UPPERCASE, LOWERCASE, NUMBERS, SYMBOLS }
-    private final StringBuilder PASSWORD = new StringBuilder();
-    public PasswordGenerator(int length) {
-        StringBuilder n = new StringBuilder();
+    private final boolean useLower;
+    private final boolean useUpper;
+    private final boolean useNumbers;
+    private final boolean useSymbols;
+
+    public PasswordGenerator(PasswordGeneratorBuilder builder) {
+        this.useLower = builder.useLower;
+        this.useUpper = builder.useUpper;
+        this.useNumbers = builder.useNumbers;
+        this.useSymbols = builder.useSymbols;
+    }
+
+    public static class PasswordGeneratorBuilder {
+        private boolean useLower;
+        private boolean useUpper;
+        private boolean useNumbers;
+        private boolean useSymbols;
+
+        public PasswordGeneratorBuilder() {
+            this.useLower = false;
+            this.useUpper = false;
+            this.useNumbers = false;
+            this.useSymbols = false;
+        }
+
+        public PasswordGeneratorBuilder useLower(boolean useLower) {
+            this.useLower = useLower;
+            return this;
+        }
+        public PasswordGeneratorBuilder useUpper(boolean useUpper) {
+            this.useUpper = useUpper;
+            return this;
+        }
+        public PasswordGeneratorBuilder useNumbers(boolean useNumbers) {
+            this.useNumbers = useNumbers;
+            return this;
+        }
+        public PasswordGeneratorBuilder useSymbols(boolean useSymbols) {
+            this.useSymbols = useSymbols;
+            return this;
+        }
+
+        public PasswordGenerator build() {
+            return new PasswordGenerator(this);
+        }
+    }
+
+    public String generate(int length) {
+        StringBuilder superStrongPassword = new StringBuilder(length);
+        Random random = new Random();
+
+        List<String> categories = new ArrayList<>(4);
+        if (useLower)
+            categories.add(LOWERCASE);
+        if (useUpper)
+            categories.add(UPPERCASE);
+        if (useNumbers)
+            categories.add(NUMBERS);
+        if (useSymbols)
+            categories.add(SYMBOLS);
+
         for (int i = 0; i < length; i++) {
-            n.append(randomLowercase(1));
-            if (n.length() == length)
-                break;
-            n.append(randomUppercase(1));
-            if (n.length() == length)
-                break;
-            n.append(randomSymbols(1));
-            if (n.length() == length)
-                break;
-            n.append(randomNumbers(1));
-            if (n.length() == length)
-                break;
+            String CharCategory = categories.get(random.nextInt(categories.size()));
+            int position = random.nextInt(CharCategory.length());
+            superStrongPassword.append(CharCategory.charAt(position));
         }
-
-        List<String> pas = Arrays.asList(n.toString().split(""));
-        Collections.shuffle(pas);
-        for (String letter : pas)
-            PASSWORD.append(letter);
-    }
-    public PasswordGenerator(int length, INCLUDE include) {
-        StringBuilder n = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            switch (include) {
-                case UPPERCASE -> n.append(randomUppercase(1));
-                case LOWERCASE -> n.append(randomLowercase(1));
-                case NUMBERS ->  n.append(randomNumbers(1));
-                case SYMBOLS -> n.append(randomSymbols(1));
-            }
-        }
-
-        List<String> pas = Arrays.asList(n.toString().split(""));
-        Collections.shuffle(pas);
-        for (String letter : pas)
-            PASSWORD.append(letter);
+        return superStrongPassword.toString();
     }
 
-    public String getP() {
-        return PASSWORD.toString();
-    }
-
-    public String randomSymbols(int n) {
-        byte[] array = new byte[256];
-        new Random().nextBytes(array);
-
-        String randomBytesString = new String(array, StandardCharsets.UTF_8);
-
-        StringBuilder r = new StringBuilder();
-        for (int i = 0; i < randomBytesString.length(); i++) {
-            char c = randomBytesString.charAt(i);
-            if (((c >= '!' && c <= '/') ||
-                    (c >= '<' && c <= '@') ||
-                    (c >= '[' && c <= '`') ||
-                    (c >= '{' && c <= '~'))
-                    && (n > 0)) {
-                r.append(c);
-                n--;
-            }
-        }
-        return r.toString();
-    }
-
-    public String randomNumbers(int n) {
-        byte[] array = new byte[256];
-        new Random().nextBytes(array);
-
-        String randomBytesString = new String(array, StandardCharsets.UTF_8);
-
-        StringBuilder r = new StringBuilder();
-        for (int i = 0; i < randomBytesString.length(); i++) {
-            char c = randomBytesString.charAt(i);
-            if ((c >= '0' && c <= '9') && (n > 0)) {
-                r.append(c);
-                n--;
-            }
-        }
-        return r.toString();
-    }
-
-    public String randomUppercase(int n) {
-        byte[] array = new byte[256];
-        new Random().nextBytes(array);
-        String randomBytesString = new String(array, StandardCharsets.UTF_8);
-        StringBuilder r = new StringBuilder();
-
-        for (int i = 0; i < randomBytesString.length(); i++) {
-            char c = randomBytesString.charAt(i);
-            if ((c >= 'A' && c <= 'Z') && (n > 0)) {
-                r.append(c);
-                n--;
-            }
-        }
-        return r.toString();
-    }
-
-    public String randomLowercase(int n) {
-        byte[] array = new byte[256];
-        new Random().nextBytes(array);
-        String randomBytesString = new String(array, StandardCharsets.UTF_8);
-        StringBuilder r = new StringBuilder();
-
-        for (int i = 0; i < randomBytesString.length(); i++) {
-            char c = randomBytesString.charAt(i);
-            if ((c >= 'a' && c <= 'z') && (n > 0)) {
-                r.append(c);
-                n--;
-            }
-        }
-        return r.toString();
-    }
 }

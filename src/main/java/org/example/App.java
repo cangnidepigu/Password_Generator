@@ -7,9 +7,13 @@ package org.example;
  */
 public class App {
     public static void main( String[] args ) {
-        PasswordGenerator passwordGenerator = new PasswordGenerator(15);
-        PasswordGenerator passwordGenerator1 = new PasswordGenerator(10, PasswordGenerator.INCLUDE.UPPERCASE);
-        System.out.println(passwordGenerator.getP());
-        System.out.println(passwordGenerator1.getP());
+        PasswordGenerator passwordGenerator = new PasswordGenerator.PasswordGeneratorBuilder()
+                .useLower(true)
+                .useUpper(true)
+                .useNumbers(true)
+                .useSymbols(true)
+                .build();
+        String militaryGradePassword = passwordGenerator.generate(15);
+        System.out.println(militaryGradePassword);
     }
 }
